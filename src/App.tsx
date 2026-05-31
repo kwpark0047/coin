@@ -4,12 +4,14 @@ import { Toaster } from 'sonner';
 import Dashboard from '@/pages/app/Dashboard';
 import Portfolio from '@/pages/app/Portfolio';
 import TradingHistory from '@/pages/app/TradingHistory';
-import { LayoutDashboard, PieChart, History } from 'lucide-react';
+import TaxAndFire from '@/pages/app/TaxAndFire';
+import { LayoutDashboard, PieChart, History, Calculator } from 'lucide-react';
 
 const navItems = [
   { to: '/dashboard', label: '대시보드', icon: LayoutDashboard },
   { to: '/portfolio', label: '포트폴리오', icon: PieChart },
   { to: '/history', label: '거래내역', icon: History },
+  { to: '/tax-fire', label: '세금/FIRE', icon: Calculator },
 ];
 
 function Nav() {
@@ -48,6 +50,7 @@ function AppLayout() {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/portfolio" element={<Portfolio />} />
           <Route path="/history" element={<TradingHistory />} />
+          <Route path="/tax-fire" element={<TaxAndFire />} />
           <Route path="*" element={<Navigate to="/dashboard" replace />} />
         </Routes>
       </main>
