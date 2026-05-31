@@ -13,6 +13,18 @@ export interface HarvestSuggestion {
   proceedsKRW: number;
 }
 
+export interface TaxLotResult {
+  symbol: string;
+  shares: number;
+  avgPurchasePriceKRW: number;
+  currentPriceKRW: number;
+  totalCostKRW: number;
+  currentValueKRW: number;
+  gainKRW: number;
+  gainPercent: number;
+  isLoss: boolean;
+}
+
 export interface TaxResult {
   holdings: TaxLotResult[];
   totalGainKRW: number;
@@ -25,18 +37,11 @@ export interface TaxResult {
   effectiveRate: number;
   suggestions: HarvestSuggestion[];
   canZeroOut: boolean;
-}
-
-export interface TaxLotResult {
-  symbol: string;
-  shares: number;
-  avgPurchasePriceKRW: number;
-  currentPriceKRW: number;
-  totalCostKRW: number;
-  currentValueKRW: number;
-  gainKRW: number;
-  gainPercent: number;
-  isLoss: boolean;
+  totalCostBasisKRW: number;
+  totalMarketValueKRW: number;
+  unrealizedGainKRW: number;
+  unusedLossKRW: number;
+  remainingDeductionKRW: number;
 }
 
 const DEDUCTION_KRW = 2_500_000;
@@ -92,6 +97,13 @@ export function calculateTaxes(lots: TaxLot[]): TaxResult {
     remainingOffset -= needed;
   }
 
+  const unusedLoss = totalLoss - totalLossRealized;
+  const remainingDeduction = netGain > 0
+    ? Math.max(0, DEDUCTION_KRW - netGain)
+    : DEDUCTION_KRW + netGain;
+  const totalCostBasisKRW = holdings.reduce((s, h) => s + h.totalCostKRW, 0);
+  const totalMarketValueKRW = holdings.reduce((s, h) => s + h.currentValueKRW, 0);
+
   return {
     holdings,
     totalGainKRW: Math.round(totalGain),
@@ -104,7 +116,57 @@ export function calculateTaxes(lots: TaxLot[]): TaxResult {
     effectiveRate: netGain > 0 ? taxDue / netGain : 0,
     suggestions,
     canZeroOut: remainingOffset <= 0,
+    totalCostBasisKRW: Math.round(totalCostBasisKRW),
+    totalMarketValueKRW: Math.round(totalMarketValueKRW),
+    unrealizedGainKRW: Math.round(totalMarketValueKRW - totalCostBasisKRW),
+    unusedLossKRW: Math.round(unusedLoss),
+    remainingDeductionKRW: Math.round(Math.max(0, remainingDeduction)),
   };
+}
+
+export function addLot(lots: TaxLot[], lot?: Partial<TaxLot>): TaxLot[] {
+  const defaults: TaxLot = {
+    symbol: '',
+    shares: 0,
+    avgPurchasePriceKRW: 0,
+    currentPriceKRW: 0,
+  };
+  return [...lots, { ...defaults, ...lot }];
+}
+
+export function removeLot(lots: TaxLot[], index: number): TaxLot[] {
+  if (index < 0 || index >= lots.length) return lots;
+  return lots.filter((_, i) => i !== index);
+}
+
+export function updateLot(lots: TaxLot[], index: number, patch: Partial<TaxLot>): TaxLot[] {
+  if (index < 0 || index >= lots.length) return lots;
+  return lots.map((lot, i) => (i === index ? { ...lot, ...patch } : lot));
+}
+
+export interface PriceUpdate {
+  symbol: string;
+  currentPriceKRW: number;
+}
+
+export function updatePrices(lots: TaxLot[], updates: PriceUpdate[]): TaxLot[] {
+  const map = new Map(updates.map((u) => [u.symbol, u.currentPriceKRW]));
+  return lots.map((lot) => {
+    const price = map.get(lot.symbol);
+    return price !== undefined ? { ...lot, currentPriceKRW: price } : lot;
+  });
+}
+
+export function exportHoldingsCSV(lots: TaxLot[]): string {
+  const header = '종목,보유량,평균단가(KRW),현재가(KRW),매수총액,평가금액,손익,수익률(%)';
+  const rows = lots.map((lot) => {
+    const cost = lot.shares * lot.avgPurchasePriceKRW;
+    const value = lot.shares * lot.currentPriceKRW;
+    const gain = value - cost;
+    const pct = cost > 0 ? ((gain / cost) * 100).toFixed(1) : '0.0';
+    return [lot.symbol, lot.shares, lot.avgPurchasePriceKRW, lot.currentPriceKRW, cost, value, gain, pct].join(',');
+  });
+  return [header, ...rows].join('\n');
 }
 
 export const DEFAULT_TAX_LOTS: TaxLot[] = [
@@ -114,3 +176,40 @@ export const DEFAULT_TAX_LOTS: TaxLot[] = [
   { symbol: 'TSLA', shares: 8, avgPurchasePriceKRW: 320000, currentPriceKRW: 278000 },
   { symbol: 'AMD', shares: 15, avgPurchasePriceKRW: 152000, currentPriceKRW: 168000 },
 ];
+
+export const POPULAR_STOCKS = [
+  { symbol: 'AAPL', name: 'Apple' },
+  { symbol: 'MSFT', name: 'Microsoft' },
+  { symbol: 'NVDA', name: 'NVIDIA' },
+  { symbol: 'TSLA', name: 'Tesla' },
+  { symbol: 'AMD', name: 'AMD' },
+  { symbol: 'AMZN', name: 'Amazon' },
+  { symbol: 'GOOGL', name: 'Alphabet' },
+  { symbol: 'META', name: 'Meta' },
+  { symbol: 'TSM', name: 'TSMC' },
+  { symbol: 'AVGO', name: 'Broadcom' },
+  { symbol: 'COST', name: 'Costco' },
+  { symbol: 'NFLX', name: 'Netflix' },
+  { symbol: 'JPM', name: 'JPMorgan' },
+  { symbol: 'V', name: 'Visa' },
+  { symbol: 'KO', name: 'Coca-Cola' },
+  { symbol: 'DIS', name: 'Disney' },
+  { symbol: 'QQQ', name: 'Invesco QQQ' },
+  { symbol: 'SPY', name: 'SPDR S&P 500' },
+] as const;
+
+export interface ExchangeRate {
+  rate: number;
+  label: string;
+}
+
+export const DEFAULT_RATE: ExchangeRate = { rate: 1350, label: '1350원/USD' };
+
+export function convertCurrency(amountKRW: number, rate: number, toUSD: boolean): number {
+  return toUSD ? Math.round(amountKRW / rate) : Math.round(amountKRW * rate);
+}
+
+export function findLotsBySymbol(lots: TaxLot[], symbol: string): TaxLot[] {
+  const s = symbol.toUpperCase();
+  return lots.filter((l) => l.symbol.toUpperCase() === s);
+}
