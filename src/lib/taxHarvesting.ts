@@ -144,19 +144,6 @@ export function updateLot(lots: TaxLot[], index: number, patch: Partial<TaxLot>)
   return lots.map((lot, i) => (i === index ? { ...lot, ...patch } : lot));
 }
 
-export interface PriceUpdate {
-  symbol: string;
-  currentPriceKRW: number;
-}
-
-export function updatePrices(lots: TaxLot[], updates: PriceUpdate[]): TaxLot[] {
-  const map = new Map(updates.map((u) => [u.symbol, u.currentPriceKRW]));
-  return lots.map((lot) => {
-    const price = map.get(lot.symbol);
-    return price !== undefined ? { ...lot, currentPriceKRW: price } : lot;
-  });
-}
-
 export function exportHoldingsCSV(lots: TaxLot[]): string {
   const header = '종목,보유량,평균단가(KRW),현재가(KRW),매수총액,평가금액,손익,수익률(%)';
   const rows = lots.map((lot) => {
@@ -198,18 +185,4 @@ export const POPULAR_STOCKS = [
   { symbol: 'SPY', name: 'SPDR S&P 500' },
 ] as const;
 
-export interface ExchangeRate {
-  rate: number;
-  label: string;
-}
 
-export const DEFAULT_RATE: ExchangeRate = { rate: 1350, label: '1350원/USD' };
-
-export function convertCurrency(amountKRW: number, rate: number, toUSD: boolean): number {
-  return toUSD ? Math.round(amountKRW / rate) : Math.round(amountKRW * rate);
-}
-
-export function findLotsBySymbol(lots: TaxLot[], symbol: string): TaxLot[] {
-  const s = symbol.toUpperCase();
-  return lots.filter((l) => l.symbol.toUpperCase() === s);
-}

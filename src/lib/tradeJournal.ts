@@ -57,7 +57,7 @@ export function loadJournal(): TradeEntry[] {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (raw) return JSON.parse(raw);
-  } catch { /* ignore */ }
+  } catch (err) { console.warn('Failed to load journal:', err); }
   return [];
 }
 

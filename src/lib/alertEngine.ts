@@ -101,7 +101,7 @@ export function loadRules(): AlertRule[] {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (raw) return JSON.parse(raw);
-  } catch { }
+  } catch (err) { console.warn('Failed to load alert rules:', err); }
   return [];
 }
 

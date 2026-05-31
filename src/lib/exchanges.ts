@@ -18,8 +18,8 @@ export function loadConnections(): Connections {
   try {
     const raw = localStorage.getItem('exchange-connections');
     if (raw) return JSON.parse(raw);
-  } catch {
-    // ignore parse errors
+  } catch (err) {
+    console.warn('Failed to load exchange connections:', err);
   }
   return {
     coinone: { status: 'disconnected' },

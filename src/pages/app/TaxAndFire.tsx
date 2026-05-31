@@ -99,7 +99,8 @@ function loadLots(): TaxLot[] | null {
     const parsed = JSON.parse(raw);
     if (!Array.isArray(parsed)) return null;
     return parsed as TaxLot[];
-  } catch {
+  } catch (err) {
+    console.warn('Failed to load tax lots:', err);
     return null;
   }
 }
@@ -107,7 +108,9 @@ function loadLots(): TaxLot[] | null {
 function saveLots(lots: TaxLot[]) {
   try {
     localStorage.setItem(LS_LOTS, JSON.stringify(lots));
-  } catch { }
+  } catch (err) {
+    console.warn('Failed to save tax lots:', err);
+  }
 }
 
 function loadDripInput(): DripInput | null {
@@ -115,7 +118,8 @@ function loadDripInput(): DripInput | null {
     const raw = localStorage.getItem(LS_DRIP);
     if (!raw) return null;
     return JSON.parse(raw) as DripInput;
-  } catch {
+  } catch (err) {
+    console.warn('Failed to load drip input:', err);
     return null;
   }
 }
@@ -123,7 +127,9 @@ function loadDripInput(): DripInput | null {
 function saveDripInput(input: DripInput) {
   try {
     localStorage.setItem(LS_DRIP, JSON.stringify(input));
-  } catch { }
+  } catch (err) {
+    console.warn('Failed to save drip input:', err);
+  }
 }
 
 
@@ -688,13 +694,15 @@ function loadScenarios(): SavedScenario[] {
   try {
     const raw = localStorage.getItem(LS_SCENARIOS);
     return raw ? JSON.parse(raw) : [];
-  } catch { return []; }
+  } catch (err) { console.warn('Failed to load scenarios:', err); return []; }
 }
 
 function saveScenarios(scenarios: SavedScenario[]) {
   try {
     localStorage.setItem(LS_SCENARIOS, JSON.stringify(scenarios));
-  } catch { }
+  } catch (err) {
+    console.warn('Failed to save scenarios:', err);
+  }
 }
 
 function ScenarioManager({

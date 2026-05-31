@@ -30,8 +30,8 @@ export function CoinOneTicker() {
           })
         );
         setTickers(results);
-      } catch {
-        // silently fail - use mock data
+      } catch (err) {
+        console.warn('CoinOneTicker fetch failed:', err);
       }
     };
     fetchTickers();
