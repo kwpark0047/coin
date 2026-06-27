@@ -8,15 +8,10 @@ export function AIBriefing() {
         <Sparkles className="h-4 w-4 text-accent" />
         <h3 className="font-display text-sm font-semibold">AI 브리핑</h3>
       </div>
-      <div className="space-y-2 text-sm text-muted-foreground leading-relaxed">
-        <p>
-          현재 비트코인이 65,000달러 선에서 안정적인 흐름을 보이고 있습니다.
-          미국 증시와의 상관관계가 0.42로 중간 수준을 유지하며,
-          단기 변동성은 낮은 편입니다.
-        </p>
-        <p>
-          포트폴리오 내 알트코인 비중이 증가 추세이나,
-          BTC 대비 상대 강도는 약화되고 있습니다.
+      <div className="py-6 text-center">
+        <Sparkles className="h-8 w-8 text-muted-foreground mx-auto mb-2 opacity-50" />
+        <p className="text-xs text-muted-foreground">
+          AI 기반 시장 분석 리포트는 준비 중입니다.
         </p>
       </div>
     </Card>

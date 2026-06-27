@@ -50,7 +50,7 @@ const Portfolio = () => {
             통합 포트폴리오
           </h1>
           <p className="text-sm text-muted-foreground mt-1">
-            \ubaa8\ub4e0 \uac70\ub798\uc18c \uc790\uc0b0\uc744 \ud1b5\ud569\ud55c \ucd1d\ud568\uaca9 \ubc0f \ubd84\uc11d
+            모든 거래소 자산을 통합한 총함격 및 분석
           </p>
         </div>
         <Button onClick={refresh} disabled={loading} className="gap-2">
@@ -67,7 +67,7 @@ const Portfolio = () => {
           <AlertTriangle className="h-5 w-5 text-bear mt-0.5 shrink-0" />
           <div>
             <div className="text-sm font-medium text-bear">
-              \uc77c\ubd80 \uac70\ub798\uc18c \uc5f0\uacb0 \uc624\ub958
+              일부 거래소 연결 오류
             </div>
             <p className="text-xs text-muted-foreground mt-0.5">
               {error || data?.errors?.join('; ')}
@@ -187,8 +187,8 @@ const Portfolio = () => {
                       colSpan={5}
                       className="py-8 text-center text-muted-foreground"
                     >
-                      \ub85c\ub4dc\ub41c \ubcf4\uc720 \uc790\uc0b0\uc774 \uc5c6\uc2b5\ub2c8\ub2e4.
-                      Settings\uc5d0\uc11c \uac70\ub798\uc18c\ub97c \uc5f0\uacb0\ud574\uc8fc\uc138\uc694.
+                      로드된 보유 자산이 없습니다.
+                      Settings에서 거래소를 연결해주세요.
                     </TableCell>
                   </TableRow>
                 )}
@@ -212,7 +212,7 @@ const Portfolio = () => {
                 loading ? 'h-4 w-4 animate-spin mr-2' : 'h-4 w-4 mr-2'
               }
             />
-            \uc7ac\uc2dc\ub3c4
+            재시도
           </Button>
         </Card>
       ) : null}

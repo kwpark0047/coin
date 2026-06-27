@@ -6,7 +6,7 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export function formatKRW(value: number): string {
-  return `\u20a9 ${Math.round(value).toLocaleString('ko-KR')}`;
+  return `\u20a9${Math.floor(value).toLocaleString('ko-KR')}`;
 }
 
 export function formatPercent(value: number): string {

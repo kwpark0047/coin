@@ -50,7 +50,7 @@ const ASSET_CLASS_LABELS: Record<AssetClass, string> = {
 };
 
 export async function aggregatePortfolio(): Promise<AggregateResult> {
-  const connections = loadConnections();
+  const connections = await loadConnections();
   const { krwPerUsdt } = await getExchangeRate();
   const holdings: PortfolioHolding[] = [];
   const errors: string[] = [];

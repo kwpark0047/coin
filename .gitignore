@@ -1,3 +1,8 @@
+# 환경 변수 파일
+.env
+.env.local
+.env.*.local
+
 # Logs
 logs
 *.log
@@ -7,12 +12,23 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
+# 의존성
 node_modules
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# 빌드 출력
 dist
 dist-ssr
-*.local
+build
+out
 
-# Editor directories and files
+# 테스트 커버리지
+coverage
+*.lcov
+
+# IDE 및 에디터
 .vscode/*
 !.vscode/extensions.json
 .idea
@@ -22,3 +38,8 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# 런타임 데이터
+*.pid
+*.seed
+*.local

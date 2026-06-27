@@ -1,4 +1,3 @@
-// src/lib/exchange/coinone.ts
 import CryptoJS from 'crypto-js';
 import { v4 as uuidv4 } from 'uuid';
 import { loadConnections } from '@/lib/exchanges';
@@ -26,11 +25,8 @@ export async function fetchCoinOneTicker(
   return { price, changePercent };
 }
 
-/**
- * Fetch CoinOne Balances via Private API V2.1
- */
 export async function fetchCoinOneBalances() {
-  const connections = loadConnections();
+  const connections = await loadConnections();
   const coinoneKeys = connections.coinone?.keys;
   
   if (!coinoneKeys?.access_token || !coinoneKeys?.secret_key) {

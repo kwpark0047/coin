@@ -528,6 +528,7 @@ export function TradeJournal() {
                       type="button"
                       onClick={() => setExpandedId(expanded ? null : entry.id)}
                       className="p-1.5 rounded-lg hover:bg-gray-100 cursor-pointer"
+                      aria-label={expanded ? '상세 정보 접기' : '상세 정보 펼치기'}
                     >
                       {expanded ? <ChevronUp className="h-4 w-4 text-muted-foreground" /> : <ChevronDown className="h-4 w-4 text-muted-foreground" />}
                     </button>
@@ -535,6 +536,7 @@ export function TradeJournal() {
                       type="button"
                       onClick={() => { deleteEntry(entry.id); refresh(); }}
                       className="p-1.5 rounded-lg hover:bg-red-50 cursor-pointer"
+                      aria-label="매매 기록 삭제"
                     >
                       <Trash2 className="h-3.5 w-3.5 text-muted-foreground hover:text-bear" />
                     </button>

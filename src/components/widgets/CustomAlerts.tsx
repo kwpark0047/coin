@@ -277,6 +277,7 @@ export function CustomAlerts({ rules, onAdd, onUpdate, onDelete, onToggle, onCre
                       type="button"
                       onClick={() => onToggle(rule.id)}
                       className="p-1.5 rounded-md hover:bg-gray-100 text-muted-foreground hover:text-foreground"
+                      aria-label={rule.enabled ? '알림 규칙 비활성화' : '알림 규칙 활성화'}
                       title={rule.enabled ? '비활성화' : '활성화'}
                     >
                       {rule.enabled ? <Bell className="h-3.5 w-3.5" /> : <BellOff className="h-3.5 w-3.5" />}
@@ -285,6 +286,7 @@ export function CustomAlerts({ rules, onAdd, onUpdate, onDelete, onToggle, onCre
                       type="button"
                       onClick={() => handleEdit(rule)}
                       className="p-1.5 rounded-md hover:bg-gray-100 text-muted-foreground hover:text-foreground"
+                      aria-label="알림 규칙 수정"
                       title="수정"
                     >
                       <Pencil className="h-3.5 w-3.5" />
@@ -293,6 +295,7 @@ export function CustomAlerts({ rules, onAdd, onUpdate, onDelete, onToggle, onCre
                       type="button"
                       onClick={() => onDelete(rule.id)}
                       className="p-1.5 rounded-md hover:bg-red-50 text-muted-foreground hover:text-bear"
+                      aria-label="알림 규칙 삭제"
                       title="삭제"
                     >
                       <Trash2 className="h-3.5 w-3.5" />

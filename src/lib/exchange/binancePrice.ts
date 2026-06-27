@@ -1,6 +1,7 @@
 export async function getBinancePrice(symbol: string): Promise<number> {
   try {
-    const resp = await fetch(`https://api.binance.com/api/v3/ticker/price?symbol=${symbol}`);
+    const resp = await fetch(`/binance/api/v3/ticker/price?symbol=${symbol}`);
+    if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
     const data = await resp.json();
     return parseFloat(data.price);
   } catch (err) {

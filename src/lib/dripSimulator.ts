@@ -128,6 +128,19 @@ export function simulateDrip(input: DripInput): DripResult {
 
   const baseFireTargetKRW = monthlyExpensesKRW * 12 * FIRE_MULTIPLIER;
 
+  if (years <= 0) {
+    return {
+      projections: [],
+      fireTargetKRW: baseFireTargetKRW,
+      fireYearReinvest: null,
+      fireYearSpend: null,
+      summary: {
+        reinvest: { finalValueKRW: currentValueKRW, totalDividendKRW: 0, yearsToFire: '시뮬레이션 기간 없음' },
+        spend: { finalValueKRW: currentValueKRW, totalDividendKRW: 0, yearsToFire: '시뮬레이션 기간 없음' },
+      },
+    };
+  }
+
   let reinvestValue = currentValueKRW;
   let spendValue = currentValueKRW;
   let fireYearReinvest: number | null = null;

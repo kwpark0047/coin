@@ -18,7 +18,7 @@ export function CoinOneTicker() {
       try {
         const results = await Promise.all(
           SYMBOLS.map(async (s) => {
-            const res = await fetch(`https://api.coinone.co.kr/ticker?currency=${s}`);
+            const res = await fetch(`/coinone/ticker?currency=${s}`);
             const data = await res.json();
             return {
               symbol: s,
